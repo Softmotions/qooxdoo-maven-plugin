@@ -59,7 +59,6 @@
     <orderEntry type="library" name="Maven: org.apache.maven:maven-artifact-manager:2.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-registry:2.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.sonatype.plexus:plexus-build-api:0.0.4" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.maven:maven-compat:3.0.5" level="project" />
   </component>
 </module>
 

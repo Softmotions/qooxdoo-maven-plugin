@@ -1,9 +1,11 @@
 package com.softmotions.qxmaven;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,22 @@ import java.util.List;
  */
 public class GenerateResourcesMojo extends AbstractResourcesMojo {
 
+    File getSourceSiteRoot() {
+        return new File(new File(this.resourcesDirectory, this.namespace), "siteroot");
+    }
+
+    public void execute() throws MojoExecutionException {
+        File siteroot = getResourcesTarget();
+        if (siteroot.isDirectory()) {
+            try {
+                FileUtils.deleteDirectory(siteroot);
+            } catch (IOException e) {
+                getLog().error(e);
+            }
+        }
+        super.execute();
+    }
+
     /**
      * Check that required resources exist and return the list of them
      *
@@ -27,13 +45,11 @@ public class GenerateResourcesMojo extends AbstractResourcesMojo {
      */
     protected List<Resource> getResources() throws MojoExecutionException {
         List<Resource> resources = new ArrayList<>();
-        File resourcesDir = new File(this.resourcesDirectory, this.namespace);
-        // ROOT
-        File configDir = new File(resourcesDir, "root");
-        if (configDir.isDirectory()) {
+        File siteroot = getSourceSiteRoot();
+        if (siteroot.isDirectory()) {
             Resource config = new Resource();
             config.setFiltering(true);
-            config.setDirectory(configDir.getAbsolutePath());
+            config.setDirectory(siteroot.getAbsolutePath());
             resources.add(config);
         }
         return resources;
@@ -41,7 +57,7 @@ public class GenerateResourcesMojo extends AbstractResourcesMojo {
 
     @Override
     protected File getResourcesTarget() {
-        return this.getApplicationTarget();
+        return new File(this.getApplicationTarget(), "siteroot");
     }
 
 }
