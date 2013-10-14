@@ -48,10 +48,18 @@
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-io:2.0.8" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.5" level="project" />
     <orderEntry type="library" name="Maven: org.tukaani:xz:1.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-exec:1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.plugin-testing:maven-plugin-testing-harness:2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-compat:3.0.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.wagon:wagon-provider-api:2.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-io:commons-io:2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven.wagon:wagon-provider-api:2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven.shared:maven-filtering:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-project:2.0.6" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-profile:2.0.6" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-artifact-manager:2.0.6" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-registry:2.0.6" level="project" />
+    <orderEntry type="library" name="Maven: org.sonatype.plexus:plexus-build-api:0.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-compat:3.0.5" level="project" />
   </component>
 </module>
 

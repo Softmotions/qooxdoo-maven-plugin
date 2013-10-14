@@ -1,0 +1,28 @@
+package com.softmotions.qxmaven;
+
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+
+/**
+ * Goal which builds the qooxdoo application
+ * <p/>
+ * A build contains all the necessaries javascript dependencies and the application sources,
+ * generally compacted into a single file
+ * <p/>
+ * Qooxdoo supports two types of build:
+ * - The development one, that works directly on the application sources, useful to develop your application
+ * (no need to recompile the application on every changes)
+ * - The production one, that create an optimized javascript file, or multiple ones by using packages
+ *
+ * @goal compile
+ * @phase compile
+ * @requiresDependencyResolution compile
+ */
+public class CompileMojo extends AbstractGeneratorMojo {
+
+    @Override
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        this.setJobName(buildJob);
+        super.execute();
+    }
+}

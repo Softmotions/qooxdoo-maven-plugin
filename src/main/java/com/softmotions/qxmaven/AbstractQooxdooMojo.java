@@ -3,6 +3,7 @@ package com.softmotions.qxmaven;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ScopeArtifactFilter;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
@@ -35,6 +36,11 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
     /**
      * @component
      */
+    protected MavenSession session;
+
+    /**
+     * @component
+     */
     protected PluginDescriptor plugin;
 
     /**
@@ -56,7 +62,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
      * Path to the qooxdoo application source directory, containing the application classes.
      *
      * @parameter property="qooxdoo.application.sourcesDirectory"
-     * default-value="${project.basedir}/src/main/qooxdoo"
+     * default-value="${project.basedir}/src/main/qooxdoo/classes"
      * @required
      */
     protected File sourcesDirectory;
@@ -74,7 +80,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
      * Path to the qooxdoo application resources directory.
      *
      * @parameter property="qooxdoo.application.resourcesDirectory"
-     * default-value="${project.basedir}/src/resources/qooxdoo"
+     * default-value="${project.basedir}/src/main/qooxdoo/resources"
      * @required
      */
     protected File resourcesDirectory;
@@ -92,10 +98,18 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
      * Path to the directory containing translation files.
      *
      * @parameter property="qooxdoo.application.translationDirectory"
-     * default-value="${project.basedir}/src/main/resources/qooxdoo/translation"
+     * default-value="${project.basedir}/src/main/qooxdoo/translation"
      * @required
      */
     protected File translationDirectory;
+
+    /**
+     * Path to the configuration directory.
+     *
+     * @parameter property="qooxdoo.application.configurationDirectory"
+     * default-value="${project.basedir}/src/main/qooxdoo/configuration"
+     */
+    protected File configuationDirectory;
 
     /**
      * The namespace of the qooxdoo application.
@@ -145,6 +159,14 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
     protected String config;
 
     /**
+     * Name of the job used to build the application.
+     *
+     * @parameter property="qooxdoo.build.job"
+     * default-value="build"
+     */
+    protected String buildJob;
+
+    /**
      * Path to the sdk directory
      *
      * @readonly
@@ -157,13 +179,6 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
      * @readonly
      */
     private File applicationTarget;
-
-    /**
-     * Path to the qooxdoo application configuration file target
-     *
-     * @readonly
-     */
-    private File configTarget;
 
 
     protected AbstractQooxdooMojo() {
@@ -191,18 +206,6 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
             this.applicationTarget = new File(this.outputDirectory, this.namespace);
         }
         return this.applicationTarget;
-    }
-
-    /**
-     * Get the path to the configuration file of the application in the target directory
-     *
-     * @return Path to the target configuration file
-     */
-    public File getConfigTarget() {
-        if (this.configTarget == null) {
-            this.configTarget = new File(this.getApplicationTarget(), this.config);
-        }
-        return this.configTarget;
     }
 
     public File getConfigDirectory() {
