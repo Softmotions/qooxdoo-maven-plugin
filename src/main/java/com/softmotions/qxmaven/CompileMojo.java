@@ -54,14 +54,14 @@ public class CompileMojo extends AbstractGeneratorMojo {
         genprops.setProperty("ts", String.valueOf(System.currentTimeMillis()));
         genprops.setProperty("job", buildJob);
 
+        this.setJobName(buildJob);
+        super.execute();
+
         try (FileWriter fr = new FileWriter(gfile)) {
             genprops.store(fr, null);
         } catch (Exception e) {
             getLog().warn(e);
         }
-
-        this.setJobName(buildJob);
-        super.execute();
     }
 
     private long getLastMtime(File file, long threshould) {
