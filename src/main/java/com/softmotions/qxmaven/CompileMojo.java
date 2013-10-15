@@ -46,7 +46,8 @@ public class CompileMojo extends AbstractGeneratorMojo {
         if (buildJob.equals(ljob) &&
             getLastMtime(this.sourcesDirectory, ts) == 0 &&
             getLastMtime(this.resourcesDirectory, ts) == 0 &&
-            getLastMtime(this.testDirectory, ts) == 0) {
+            getLastMtime(this.testDirectory, ts) == 0 &&
+            getLastMtime(this.configuationDirectory, ts) == 0) {
             getLog().info("No Qooxdoo sources/job changed skip application generation");
             return;
         }
