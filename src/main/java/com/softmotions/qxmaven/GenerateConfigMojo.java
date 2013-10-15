@@ -30,7 +30,8 @@ public class GenerateConfigMojo extends AbstractResourcesMojo {
             "qooxdoo.application.testDirectory",
             "qooxdoo.application.outputDirectory",
             "qooxdoo.application.cacheDirectory",
-            "qooxdoo.application.translationDirectory"
+            "qooxdoo.application.translationDirectory",
+            "qooxdoo.submodules.dir"
     };
 
     /**
@@ -55,7 +56,11 @@ public class GenerateConfigMojo extends AbstractResourcesMojo {
             getLog().debug("The following path properties will be relativized to the application target '" + target.getAbsolutePath() + "':");
             for (String prop : propsDirectoryToRelativize) {
                 try {
-                    File path = new File((String) this.project.getProperties().get(prop));
+                    String spath = this.project.getProperties().getProperty(prop);
+                    if (spath == null) {
+                        continue;
+                    }
+                    File path = new File(spath);
                     String relPath = ResourceUtils.getRelativePath(path.getAbsolutePath(), target.getAbsolutePath(), "/", false);
                     getLog().debug("  - " + prop + ": " + path.getAbsolutePath() + " => " + relPath);
                     this.project.getProperties().put(prop, relPath);
