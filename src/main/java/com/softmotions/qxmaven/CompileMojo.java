@@ -3,6 +3,11 @@ package com.softmotions.qxmaven;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.Properties;
+
 /**
  * Goal which builds the qooxdoo application
  * <p/>
@@ -22,7 +27,63 @@ public class CompileMojo extends AbstractGeneratorMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+
+        File gfile = new File(super.getApplicationTarget(), ".generation");
+        long ts = 0;
+        String ljob = null;
+        Properties genprops = new Properties();
+
+        if (gfile.exists()) {
+            try (FileReader fr = new FileReader(gfile)) {
+                genprops.load(fr);
+                ts = Long.valueOf(genprops.getProperty("ts"));
+                ljob = genprops.getProperty("job");
+            } catch (Exception e) {
+                getLog().warn(e);
+            }
+        }
+
+        if (buildJob.equals(ljob) &&
+            getLastMtime(this.sourcesDirectory, ts) == 0 &&
+            getLastMtime(this.resourcesDirectory, ts) == 0 &&
+            getLastMtime(this.testDirectory, ts) == 0) {
+            getLog().info("No Qooxdoo sources/job changed skip application generation");
+            return;
+        }
         this.setJobName(buildJob);
         super.execute();
+
+        genprops.setProperty("ts", String.valueOf(System.currentTimeMillis()));
+        genprops.setProperty("job", buildJob);
+
+        try (FileWriter fr = new FileWriter(gfile)) {
+            genprops.store(fr, null);
+        } catch (Exception e) {
+            getLog().warn(e);
+        }
+    }
+
+    private long getLastMtime(File file, long threshould) {
+        if (file == null || !file.exists()) {
+            return 0;
+        }
+        long lm = 0;
+        if (!file.isDirectory()) {
+            lm = file.lastModified();
+            if (lm > threshould) {
+                return lm;
+            }
+        }
+        File[] files = file.listFiles();
+        if (files == null) {
+            return 0;
+        }
+        for (File f : files) {
+            lm = getLastMtime(f, threshould);
+            if (lm > 0) {
+                return lm;
+            }
+        }
+        return 0;
     }
 }
