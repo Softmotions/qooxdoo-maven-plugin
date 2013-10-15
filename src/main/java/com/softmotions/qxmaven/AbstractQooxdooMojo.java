@@ -241,13 +241,13 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
         if (dependencies.size() == 0) {
             return null;
         }
-        ArtifactFilter runtime = new ScopeArtifactFilter(Artifact.SCOPE_COMPILE);
+        //ArtifactFilter runtime = new ScopeArtifactFilter(Artifact.SCOPE_PROVIDED);
         for (Artifact dependency : dependencies) {
             if (!dependency.isOptional()
                 && "jar".equals(dependency.getType())
                 && "org.qooxdoo".equals(dependency.getGroupId())
                 && "qooxdoo-sdk".equals(dependency.getArtifactId())
-                && runtime.include(dependency)) {
+                /*&& runtime.include(dependency)<*/) {
                 return dependency;
             }
         }
