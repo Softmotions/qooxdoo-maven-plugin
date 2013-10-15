@@ -48,7 +48,7 @@ public class GenerateResourcesMojo extends AbstractResourcesMojo {
         File siteroot = getSourceSiteRoot();
         if (siteroot.isDirectory()) {
             Resource config = new Resource();
-            config.setFiltering(true);
+            config.setFiltering(false);
             config.setDirectory(siteroot.getAbsolutePath());
             resources.add(config);
         }
