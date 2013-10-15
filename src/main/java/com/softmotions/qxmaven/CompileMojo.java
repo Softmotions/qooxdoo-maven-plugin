@@ -50,8 +50,6 @@ public class CompileMojo extends AbstractGeneratorMojo {
             getLog().info("No Qooxdoo sources/job changed skip application generation");
             return;
         }
-        this.setJobName(buildJob);
-        super.execute();
 
         genprops.setProperty("ts", String.valueOf(System.currentTimeMillis()));
         genprops.setProperty("job", buildJob);
@@ -61,6 +59,9 @@ public class CompileMojo extends AbstractGeneratorMojo {
         } catch (Exception e) {
             getLog().warn(e);
         }
+
+        this.setJobName(buildJob);
+        super.execute();
     }
 
     private long getLastMtime(File file, long threshould) {
