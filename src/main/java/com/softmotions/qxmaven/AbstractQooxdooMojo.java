@@ -10,7 +10,7 @@ import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
-import org.sonatype.aether.impl.ArtifactResolver;
+import org.eclipse.aether.impl.ArtifactResolver;
 
 import java.io.File;
 import java.util.Set;
