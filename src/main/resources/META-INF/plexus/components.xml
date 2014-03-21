@@ -37,6 +37,7 @@
                             <generate-resources>softmotions:qooxdoo-maven-plugin:generate-resources</generate-resources>
                             <compile>softmotions:qooxdoo-maven-plugin:compile</compile>
                             <package>softmotions:qooxdoo-maven-plugin:package-jar</package>
+                            <install>org.apache.maven.plugins:maven-install-plugin:install</install>
                         </phases>
                     </lifecycle>
                 </lifecycles>
