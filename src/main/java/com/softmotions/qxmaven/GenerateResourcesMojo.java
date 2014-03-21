@@ -53,6 +53,7 @@ public class GenerateResourcesMojo extends AbstractResourcesMojo {
             config.setDirectory(siteroot.getAbsolutePath());
             config.setExcludes(Arrays.asList("WEB-INF/**/*.xml"));
             resources.add(config);
+
             config = new Resource();
             config.setFiltering(true);
             config.setDirectory(siteroot.getAbsolutePath());

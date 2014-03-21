@@ -159,6 +159,15 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
     protected String config;
 
     /**
+     * The name of the qooxdoo application manifest file.
+     *
+     * @parameter property="qooxdoo.application.manifest"
+     * default-value="Manifest.json"
+     * @required
+     */
+    protected String manifest;
+
+    /**
      * Name of the job used to build the application.
      *
      * @parameter property="qooxdoo.build.job"
@@ -209,12 +218,15 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
     }
 
     public File getConfigDirectory() {
-        File resourcesDir = new File(this.resourcesDirectory, this.namespace);
-        return new File(resourcesDir, "config");
+        return new File(this.configuationDirectory, this.namespace);
     }
 
     public File getConfigJson() {
         return new File(getConfigDirectory(), this.config);
+    }
+
+    public File getManifestJson() {
+        return new File(getConfigDirectory(), this.manifest);
     }
 
     public String getNamespace() {

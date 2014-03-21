@@ -22,5 +22,27 @@
                 </lifecycles>
             </configuration>
         </component>
+
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>qooxdoo-jar</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                            <initialize>softmotions:qooxdoo-maven-plugin:sdk-unpack</initialize>
+                            <generate-sources>softmotions:qooxdoo-maven-plugin:generate-config</generate-sources>
+                            <generate-resources>softmotions:qooxdoo-maven-plugin:generate-resources</generate-resources>
+                            <compile>softmotions:qooxdoo-maven-plugin:compile</compile>
+                            <package>softmotions:qooxdoo-maven-plugin:package-jar</package>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+
+
     </components>
 </component-set>
