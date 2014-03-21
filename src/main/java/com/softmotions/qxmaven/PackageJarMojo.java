@@ -141,6 +141,7 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
                         .addFile(mf, "META-INF/qooxdoo/" + mf.getName());
             }
         }
+        archive.addManifestEntry("Qooxdoo-App-Artifact", this.project.getArtifactId());
         archive.addManifestEntry("Qooxdoo-App-Namespace", this.getNamespace());
         archive.addManifestEntry("Qooxdoo-App-Build-Job", this.buildJob);
         if (getSdkVersion() != null) {
@@ -152,7 +153,8 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
                               rootdir.getPath() + " empty JAR will be produced");
             } else {
                 ma.getArchiver()
-                        .addDirectory(rootdir, getPackageIncludes(), getPackageExcludes());
+                        .addDirectory(rootdir, this.project.getArtifactId() + "/" + this.namespace + "/",
+                                      getPackageIncludes(), getPackageExcludes());
             }
             ma.createArchive(session, project, archive);
             return jarFile;
