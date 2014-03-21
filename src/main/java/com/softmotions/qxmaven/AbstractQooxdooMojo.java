@@ -1,8 +1,6 @@
 package com.softmotions.qxmaven;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
-import org.apache.maven.artifact.resolver.filter.ScopeArtifactFilter;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecution;
@@ -13,6 +11,8 @@ import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.eclipse.aether.impl.ArtifactResolver;
 
 import java.io.File;
+import java.io.FileReader;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -264,5 +264,56 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
             }
         }
         return null;
+    }
+
+
+    protected long getLastMtime(File file, long threshould) {
+        if (file == null || !file.exists()) {
+            return 0;
+        }
+        long lm = 0;
+        if (!file.isDirectory()) {
+            lm = file.lastModified();
+            if (lm > threshould) {
+                return lm;
+            }
+        }
+        File[] files = file.listFiles();
+        if (files == null) {
+            return 0;
+        }
+        for (File f : files) {
+            lm = getLastMtime(f, threshould);
+            if (lm > 0) {
+                return lm;
+            }
+        }
+        return 0;
+    }
+
+    protected boolean isQooxdooSourcesChanged() {
+        long ts = 0;
+        String ljob = null;
+        Properties genprops = new Properties();
+        File gfile = new File(getApplicationTarget(), ".generation");
+        if (gfile.exists()) {
+            try (FileReader fr = new FileReader(gfile)) {
+                genprops.load(fr);
+                ts = Long.valueOf(genprops.getProperty("ts"));
+                ljob = genprops.getProperty("job");
+            } catch (Exception e) {
+                getLog().warn(e);
+            }
+        } else {
+            return true;
+        }
+        if (buildJob.equals(ljob) &&
+            getLastMtime(this.sourcesDirectory, ts) == 0 &&
+            getLastMtime(this.resourcesDirectory, ts) == 0 &&
+            getLastMtime(this.testDirectory, ts) == 0 &&
+            getLastMtime(this.configuationDirectory, ts) == 0) {
+            return false;
+        }
+        return true;
     }
 }

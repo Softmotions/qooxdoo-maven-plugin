@@ -27,65 +27,21 @@ public class CompileMojo extends AbstractGeneratorMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-
-        File gfile = new File(super.getApplicationTarget(), ".generation");
-        long ts = 0;
-        String ljob = null;
-        Properties genprops = new Properties();
-
-        if (gfile.exists()) {
-            try (FileReader fr = new FileReader(gfile)) {
-                genprops.load(fr);
-                ts = Long.valueOf(genprops.getProperty("ts"));
-                ljob = genprops.getProperty("job");
-            } catch (Exception e) {
-                getLog().warn(e);
-            }
-        }
-
-        if (buildJob.equals(ljob) &&
-            getLastMtime(this.sourcesDirectory, ts) == 0 &&
-            getLastMtime(this.resourcesDirectory, ts) == 0 &&
-            getLastMtime(this.testDirectory, ts) == 0 &&
-            getLastMtime(this.configuationDirectory, ts) == 0) {
+        if (!isQooxdooSourcesChanged()) {
             getLog().info("No Qooxdoo sources/job changed skip application generation");
             return;
         }
-
+        Properties genprops = new Properties();
         genprops.setProperty("ts", String.valueOf(System.currentTimeMillis()));
         genprops.setProperty("job", buildJob);
 
         this.setJobName(buildJob);
         super.execute();
 
-        try (FileWriter fr = new FileWriter(gfile)) {
+        try (FileWriter fr = new FileWriter(new File(super.getApplicationTarget(), ".generation"))) {
             genprops.store(fr, null);
         } catch (Exception e) {
             getLog().warn(e);
         }
-    }
-
-    private long getLastMtime(File file, long threshould) {
-        if (file == null || !file.exists()) {
-            return 0;
-        }
-        long lm = 0;
-        if (!file.isDirectory()) {
-            lm = file.lastModified();
-            if (lm > threshould) {
-                return lm;
-            }
-        }
-        File[] files = file.listFiles();
-        if (files == null) {
-            return 0;
-        }
-        for (File f : files) {
-            lm = getLastMtime(f, threshould);
-            if (lm > 0) {
-                return lm;
-            }
-        }
-        return 0;
     }
 }

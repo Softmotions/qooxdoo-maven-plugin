@@ -28,10 +28,14 @@ public class GenerateResourcesMojo extends AbstractResourcesMojo {
     public void execute() throws MojoExecutionException {
         File siteroot = getResourcesTarget();
         if (siteroot.isDirectory()) {
-            try {
-                FileUtils.deleteDirectory(siteroot);
-            } catch (IOException e) {
-                getLog().error(e);
+            if (!isQooxdooSourcesChanged()) {
+                getLog().info("No Qooxdoo sources/job changed skip application resources re-creation");
+            } else {
+                try {
+                    FileUtils.deleteDirectory(siteroot);
+                } catch (IOException e) {
+                    getLog().error(e);
+                }
             }
         }
         super.execute();
@@ -42,7 +46,6 @@ public class GenerateResourcesMojo extends AbstractResourcesMojo {
      *
      * @return A list of html resources to be filtered/copied
      * @throws org.apache.maven.plugin.MojoExecutionException
-     *
      */
     protected List<Resource> getResources() throws MojoExecutionException {
         List<Resource> resources = new ArrayList<>();
