@@ -2,6 +2,8 @@ package com.softmotions.qxmaven;
 
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 
@@ -14,10 +16,13 @@ import java.util.List;
  * <p/>
  * To generate the files, it filters and copy resources located into:
  * ${resourcesDirectory}/config
- *
- * @goal generate-config
- * @phase generate-sources
+ * <p/>
+ * goal generate-config
+ * phase generate-sources
  */
+
+@Mojo(name = "generate-config",
+      defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class GenerateConfigMojo extends AbstractResourcesMojo {
     /**
      * Some properties, referring to paths, need to be relativized before being wrote into config files.
@@ -76,7 +81,6 @@ public class GenerateConfigMojo extends AbstractResourcesMojo {
      *
      * @return A list of qooxdoo resources to be filtered/copied
      * @throws org.apache.maven.plugin.MojoExecutionException
-     *
      */
     protected List<Resource> getResources() throws MojoExecutionException {
         List<Resource> qxResources = new ArrayList<>();

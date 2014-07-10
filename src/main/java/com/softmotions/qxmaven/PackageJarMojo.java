@@ -2,9 +2,13 @@ package com.softmotions.qxmaven;
 
 import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.archiver.MavenArchiver;
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 
@@ -13,13 +17,18 @@ import java.io.File;
 /**
  * Package compiled qxoodoo application
  * assets into single JAR file.
- *
- * @goal package-jar
- * @phase package
- * @requiresDependencyResolution compile
+ * <p/>
+ * goal package-jar
+ * phase package
+ * requiresDependencyResolution compile
  *
  * @author Adamansky Anton (adamansky@gmail.com)s
  */
+
+@Mojo(name = "package-jar",
+      defaultPhase = LifecyclePhase.PACKAGE,
+      requiresDependencyResolution = ResolutionScope.COMPILE)
+
 public class PackageJarMojo extends AbstractQooxdooMojo {
 
     private static final String[] DEFAULT_EXCLUDES = new String[]{};
@@ -29,25 +38,28 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
     /**
      * List of files to include. Specified as fileset patterns which are relative to the input directory whose contents
      * is being packaged into the JAR.
-     *
-     * @parameter
+     * <p/>
+     * parameter
      */
+    @Parameter
     private String[] packageIncludes;
 
     /**
      * List of files to exclude. Specified as fileset patterns which are relative to the input directory whose contents
      * is being packaged into the JAR.
-     *
-     * @parameter
+     * <p/>
+     * parameter
      */
+    @Parameter
     private String[] packageExcludes;
 
     /**
      * Directory containing the generated JAR.
-     *
-     * @parameter default-value="${project.build.directory}"
-     * @required
+     * <p/>
+     * parameter default-value="${project.build.directory}"
+     * required
      */
+    @Parameter(defaultValue = "${project.build.directory}", required = true)
     private File jarOutputDirectory;
 
     /**
@@ -56,26 +68,33 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
      * @parameter alias="jarName" property="qooxdoo.package.finalName" default-value="${project.build.finalName}"
      * @required
      */
+    @Parameter(property = "qooxdoo.package.finalName",
+               alias = "jarName",
+               defaultValue = "${project.build.finalName}",
+               required = true)
     private String jarFinalName;
 
     /**
      * The Jar archiver.
-     *
-     * @component role="org.codehaus.plexus.archiver.Archiver" roleHint="jar"
+     * <p/>
+     * component role="org.codehaus.plexus.archiver.Archiver" roleHint="jar"
      */
+    @Component(role = org.codehaus.plexus.archiver.Archiver.class, hint = "jar")
     private JarArchiver jarArchiver;
 
     /**
      * The archive configuration to use.
      * See <a href="http://maven.apache.org/shared/maven-archiver/index.html">Maven Archiver Reference</a>.
-     *
-     * @parameter
+     * <p/>
+     * parameter
      */
+    @Parameter
     private MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
 
     /**
-     * @component
+     * component
      */
+    @Component
     private MavenProjectHelper projectHelper;
 
     /**

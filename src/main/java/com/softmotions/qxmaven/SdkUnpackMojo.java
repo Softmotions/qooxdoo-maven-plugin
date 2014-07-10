@@ -3,6 +3,9 @@ package com.softmotions.qxmaven;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 import org.codehaus.plexus.util.FileUtils;
@@ -12,11 +15,15 @@ import java.io.File;
 /**
  * Goal which unpack the qooxdoo sdk to the target directory,
  * by using the qooxdoo.org:qooxdoo-sdk dependency
- *
- * @goal sdk-unpack
- * @phase initialize
- * @requiresDependencyResolution compile
+ * <p/>
+ * goal sdk-unpack
+ * phase initialize
+ * requiresDependencyResolution compile
  */
+
+@Mojo(name = "sdk-unpack",
+      defaultPhase = LifecyclePhase.INITIALIZE,
+      requiresDependencyResolution = ResolutionScope.COMPILE)
 public class SdkUnpackMojo extends AbstractQooxdooMojo {
 
 

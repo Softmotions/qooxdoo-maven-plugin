@@ -2,9 +2,11 @@ package com.softmotions.qxmaven;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.Properties;
 
@@ -18,11 +20,14 @@ import java.util.Properties;
  * - The development one, that works directly on the application sources, useful to develop your application
  * (no need to recompile the application on every changes)
  * - The production one, that create an optimized javascript file, or multiple ones by using packages
- *
- * @goal compile
- * @phase compile
- * @requiresDependencyResolution compile
+ * <p/>
+ * goal compile
+ * phase compile
+ * requiresDependencyResolution compile
  */
+@Mojo(name = "compile",
+      defaultPhase = LifecyclePhase.COMPILE,
+      requiresDependencyResolution = ResolutionScope.COMPILE)
 public class CompileMojo extends AbstractGeneratorMojo {
 
     @Override

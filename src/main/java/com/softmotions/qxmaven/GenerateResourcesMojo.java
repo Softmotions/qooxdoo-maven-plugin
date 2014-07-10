@@ -3,6 +3,8 @@ package com.softmotions.qxmaven;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,9 +18,12 @@ import java.util.List;
  * This goal copy the files located into the "root" folder of the resources
  * into the target application directory
  *
- * @goal generate-resources
- * @phase generate-resources
+ * goal generate-resources
+ * phase generate-resources
  */
+
+@Mojo(name = "generate-resources",
+      defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public class GenerateResourcesMojo extends AbstractResourcesMojo {
 
     File getSourceSiteRoot() {

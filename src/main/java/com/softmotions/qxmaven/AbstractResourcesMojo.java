@@ -2,6 +2,8 @@ package com.softmotions.qxmaven;
 
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
 import org.apache.maven.shared.filtering.MavenResourcesFiltering;
@@ -22,24 +24,32 @@ public abstract class AbstractResourcesMojo extends AbstractQooxdooMojo {
     /**
      * Whether to escape backslashes and colons in windows-style paths.
      *
-     * @parameter property="qooxdoo.resources.escapeWindowsPaths"
+     * parameter property="qooxdoo.resources.escapeWindowsPaths"
      * default-value="true"
      */
+
+    @Parameter(property = "qooxdoo.resources.escapeWindowsPaths",
+               defaultValue = "true",
+               required = false)
     protected boolean escapeWindowsPaths;
 
     /**
      * Expression preceded with the String won't be interpolated \${foo} will be
      * replaced with ${foo}.
      *
-     * @parameter property="qooxdoo.resources.escapeString"
+     * parameter property="qooxdoo.resources.escapeString"
      */
+    @Parameter(property = "qooxdoo.resources.escapeString")
     protected String escapeString;
 
     /**
-     * @component role="org.apache.maven.shared.filtering.MavenResourcesFiltering"
+     * component role="org.apache.maven.shared.filtering.MavenResourcesFiltering"
      * role-hint="default"
-     * @required
+     * required
      */
+    @Parameter(required = true)
+    @Component(role = org.apache.maven.shared.filtering.MavenResourcesFiltering.class,
+               hint = "default")
     protected MavenResourcesFiltering mavenResourcesFiltering;
 
     public void execute() throws MojoExecutionException {

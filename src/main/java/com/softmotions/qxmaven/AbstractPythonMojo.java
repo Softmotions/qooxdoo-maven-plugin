@@ -4,6 +4,7 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 import java.util.HashMap;
@@ -23,9 +24,11 @@ public abstract class AbstractPythonMojo extends AbstractQooxdooMojo {
     /**
      * Name of the python interpreter or full path to it
      *
-     * @parameter property="qooxdoo.build.python"
+     * parameter property="qooxdoo.build.python"
      * default-value="python"
      */
+    @Parameter(property = "qooxdoo.build.python",
+               defaultValue = "python")
     protected String pythonInterpreter;
 
     /**
