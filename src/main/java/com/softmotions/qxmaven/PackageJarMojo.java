@@ -31,9 +31,9 @@ import java.io.File;
 
 public class PackageJarMojo extends AbstractQooxdooMojo {
 
-    private static final String[] DEFAULT_EXCLUDES = new String[]{};
+    protected static final String[] DEFAULT_EXCLUDES = new String[]{};
 
-    private static final String[] DEFAULT_INCLUDES = new String[]{"**/**"};
+    protected static final String[] DEFAULT_INCLUDES = new String[]{"**/*"};
 
     /**
      * List of files to include. Specified as fileset patterns which are relative to the input directory whose contents
@@ -42,7 +42,7 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
      * parameter
      */
     @Parameter
-    private String[] packageIncludes;
+    protected String[] packageIncludes;
 
     /**
      * List of files to exclude. Specified as fileset patterns which are relative to the input directory whose contents
@@ -51,7 +51,7 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
      * parameter
      */
     @Parameter
-    private String[] packageExcludes;
+    protected String[] packageExcludes;
 
     /**
      * Directory containing the generated JAR.
@@ -60,7 +60,7 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
      * required
      */
     @Parameter(defaultValue = "${project.build.directory}", required = true)
-    private File jarOutputDirectory;
+    protected File jarOutputDirectory;
 
     /**
      * Name of the generated JAR.
@@ -72,7 +72,7 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
                alias = "jarName",
                defaultValue = "${project.build.finalName}",
                required = true)
-    private String jarFinalName;
+    protected String jarFinalName;
 
     /**
      * The Jar archiver.
@@ -80,7 +80,7 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
      * component role="org.codehaus.plexus.archiver.Archiver" roleHint="jar"
      */
     @Component(role = org.codehaus.plexus.archiver.Archiver.class, hint = "jar")
-    private JarArchiver jarArchiver;
+    protected JarArchiver jarArchiver;
 
     /**
      * The archive configuration to use.
@@ -89,13 +89,13 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
      * parameter
      */
     @Parameter
-    private MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
+    protected MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
 
     /**
      * component
      */
     @Component
-    private MavenProjectHelper projectHelper;
+    protected MavenProjectHelper projectHelper;
 
     /**
      * Return the specific output directory to serve as the root for the archive.
@@ -118,14 +118,14 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
         return "jar";
     }
 
-    private String[] getPackageIncludes() {
+    protected String[] getPackageIncludes() {
         if (packageIncludes != null && packageIncludes.length > 0) {
             return packageIncludes;
         }
         return DEFAULT_INCLUDES;
     }
 
-    private String[] getPackageExcludes() {
+    protected String[] getPackageExcludes() {
         if (packageExcludes != null && packageExcludes.length > 0) {
             return packageExcludes;
         }
@@ -141,7 +141,12 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
         return new File(basedir, finalName + classifier + ".jar");
     }
 
-    protected File createArchive(File rootdir) throws MojoExecutionException {
+    protected File createArchive() throws MojoExecutionException {
+        File rootdir = getRootDirectory();
+        if (!rootdir.isDirectory()) {
+            getLog().warn("Missing JAR root directory: " + rootdir.getPath());
+            return null;
+        }
         File jarFile = getJarFile(jarOutputDirectory, jarFinalName, getClassifier());
         getLog().info("Creating qooxdoo JAR archive: " + jarFile.getPath() +
                       " from: " + rootdir.getPath());
@@ -183,12 +188,10 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        File rootdir = getRootDirectory();
-        if (!rootdir.isDirectory()) {
-            getLog().warn("Missing JAR root directory: " + rootdir.getPath());
+        File jarFile = createArchive();
+        if (jarFile == null) {
             return;
         }
-        File jarFile = createArchive(rootdir);
         getLog().info("Archive: " + jarFile.getPath() + " successfully created");
         String classifier = getClassifier();
         if (classifier != null) {

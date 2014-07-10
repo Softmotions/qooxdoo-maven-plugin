@@ -56,7 +56,7 @@
     <orderEntry type="library" name="Maven: org.tukaani:xz:1.2" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-exec:1.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.plugin-testing:maven-plugin-testing-harness:3.0.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.plugin-testing:maven-plugin-testing-harness:3.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-compat:3.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.wagon:wagon-provider-api:2.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.shared:maven-filtering:1.2" level="project" />
@@ -66,6 +66,9 @@
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-registry:2.0.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.shared:maven-shared-utils:0.3" level="project" />
     <orderEntry type="library" name="Maven: org.sonatype.plexus:plexus-build-api:0.0.4" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.4.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.4.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.4.0" level="project" />
   </component>
 </module>
 

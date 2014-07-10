@@ -27,7 +27,7 @@ import java.util.List;
 public class GenerateResourcesMojo extends AbstractResourcesMojo {
 
     File getSourceSiteRoot() {
-        return new File(new File(this.resourcesDirectory, this.namespace), "siteroot");
+        return new File(this.resourcesDirectory, "siteroot");
     }
 
     public void execute() throws MojoExecutionException {

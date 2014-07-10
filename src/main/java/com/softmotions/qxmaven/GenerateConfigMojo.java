@@ -89,7 +89,7 @@ public class GenerateConfigMojo extends AbstractResourcesMojo {
         if (!configDir.isDirectory()) {
             throw new MojoExecutionException("Qooxdoo configuration directory \'" + configDir.getAbsolutePath() + "\' does not exists or is not a directory !");
         }
-        File manifestJson = new File(configDir, "Manifest.json");
+        File manifestJson = new File(configDir, manifest);
         if (!manifestJson.isFile()) {
             throw new MojoExecutionException("Qooxdoo manifest file \'" + manifestJson.getAbsolutePath() + "\' does not exists or is not a file !");
         }
