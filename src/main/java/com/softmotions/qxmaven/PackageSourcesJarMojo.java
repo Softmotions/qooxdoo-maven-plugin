@@ -41,6 +41,7 @@ public class PackageSourcesJarMojo extends PackageJarMojo {
         archive.addManifestEntry("Qooxdoo-App-Artifact", this.project.getArtifactId());
         archive.addManifestEntry("Qooxdoo-App-Namespace", this.getNamespace());
         archive.addManifestEntry("Qooxdoo-App-Build-Job", this.buildJob);
+        archive.addManifestEntry("Qooxdoo-App-Version", this.project.getVersion());
         if (getSdkVersion() != null) {
             archive.addManifestEntry("Qooxdoo-Sdk-Version", getSdkVersion());
         }

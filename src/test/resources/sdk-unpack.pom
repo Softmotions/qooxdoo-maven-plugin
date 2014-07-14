@@ -11,7 +11,7 @@
                         <version>0.0.1</version>
                     </project>
                     <namespace>test</namespace>
-                    <sdkParentDirectory>target/test-target</sdkParentDirectory>
+                    <modulesCacheDirectory>target/test-target</modulesCacheDirectory>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>

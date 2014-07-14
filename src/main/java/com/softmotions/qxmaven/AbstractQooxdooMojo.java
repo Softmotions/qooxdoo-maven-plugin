@@ -155,14 +155,14 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
      * The parent directory must contains a sub-directory named qooxdoo-sdk, that contains the unpacked qooxdoo sdk.
      * The qooxdoo-sdk is automatically installed in the right place if you are using the qooxdoo-sdk maven dependency in your pom.
      *
-     * parameter property="qooxdoo.sdk.parentDirectory"
+     * parameter property="qooxdoo.modules.cacheDirectory"
      * default-value="${project.build.directory}"
      * required
      */
-    @Parameter(property = "qooxdoo.sdk.parentDirectory",
+    @Parameter(property = "qooxdoo.modules.cacheDirectory",
                defaultValue = "${project.build.directory}",
                required = true)
-    protected File sdkParentDirectory;
+    protected File modulesCacheDirectory;
 
     /**
      * Path to the output directory where application will be builded.
@@ -250,7 +250,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
      */
     public File getSdkDirectory() {
         if (this.sdkDirectory == null) {
-            this.sdkDirectory = new File(this.sdkParentDirectory, QOOXDOO_SDK_DIRECTORY);
+            this.sdkDirectory = new File(this.modulesCacheDirectory, QOOXDOO_SDK_DIRECTORY);
         }
         return this.sdkDirectory;
     }

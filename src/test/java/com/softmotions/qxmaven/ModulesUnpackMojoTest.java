@@ -10,7 +10,7 @@ import java.io.File;
  * @author Adamansky Anton (anton@adamansky.com)
  * @version $Id$
  */
-public class SdkUnpackMojoTest extends AbstractMojoTestCase {
+public class ModulesUnpackMojoTest extends AbstractMojoTestCase {
 
     public void testUnpack() throws Exception {
         /*File testPom = new File(getBasedir(), "src/test/resources/sdk-unpack.pom");

@@ -29,7 +29,7 @@ public class GenerateConfigMojo extends AbstractResourcesMojo {
      * WARNING: the value of the following properties must contains path to directory (not to a file)
      */
     private static String[] propsDirectoryToRelativize = {
-            "qooxdoo.sdk.parentDirectory",
+            "qooxdoo.modules.cacheDirectory",
             "qooxdoo.application.resourcesDirectory",
             "qooxdoo.application.sourcesDirectory",
             "qooxdoo.application.testDirectory",

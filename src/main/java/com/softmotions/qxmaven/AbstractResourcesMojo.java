@@ -127,6 +127,6 @@ public abstract class AbstractResourcesMojo extends AbstractQooxdooMojo {
             this.project.getProperties().put("qooxdoo.sdk.version", this.getSdkVersion());
         }
         this.project.getProperties().put("qooxdoo.build.sourceEncoding", this.encoding);
-        this.project.getProperties().put("qooxdoo.sdk.parentDirectory", this.sdkParentDirectory.getAbsolutePath());
+        this.project.getProperties().put("qooxdoo.modules.cacheDirectory", this.modulesCacheDirectory.getAbsolutePath());
     }
 }
