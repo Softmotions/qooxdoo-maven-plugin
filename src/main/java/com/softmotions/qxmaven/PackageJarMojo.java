@@ -26,8 +26,7 @@ import java.io.File;
  */
 
 @Mojo(name = "package-jar",
-      defaultPhase = LifecyclePhase.PACKAGE,
-      requiresDependencyResolution = ResolutionScope.COMPILE)
+      defaultPhase = LifecyclePhase.PACKAGE)
 
 public class PackageJarMojo extends AbstractQooxdooMojo {
 

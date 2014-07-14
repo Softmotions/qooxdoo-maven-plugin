@@ -20,8 +20,7 @@ import java.io.IOException;
  * @author Adamansky Anton (adamansky@gmail.com)
  */
 @Mojo(name = "package-sources",
-      defaultPhase = LifecyclePhase.PACKAGE,
-      requiresDependencyResolution = ResolutionScope.COMPILE)
+      defaultPhase = LifecyclePhase.PACKAGE)
 
 public class PackageSourcesJarMojo extends PackageJarMojo {
 

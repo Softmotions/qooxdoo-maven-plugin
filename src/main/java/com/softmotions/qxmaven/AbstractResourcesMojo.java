@@ -115,18 +115,18 @@ public abstract class AbstractResourcesMojo extends AbstractQooxdooMojo {
      * Make sure the required project properties for filtering are defined.
      */
     protected void setProperties() {
-        this.project.getProperties().put("qooxdoo.application.namespace", this.namespace);
-        this.project.getProperties().put("qooxdoo.application.config", this.config);
-        this.project.getProperties().put("qooxdoo.application.resourcesDirectory", this.resourcesDirectory.getAbsolutePath());
-        this.project.getProperties().put("qooxdoo.application.sourcesDirectory", this.sourcesDirectory.getAbsolutePath());
-        this.project.getProperties().put("qooxdoo.application.testDirectory", this.testDirectory.getAbsolutePath());
-        this.project.getProperties().put("qooxdoo.application.outputDirectory", this.outputDirectory.getAbsolutePath());
-        this.project.getProperties().put("qooxdoo.application.cacheDirectory", this.cacheDirectory.getAbsolutePath());
-        this.project.getProperties().put("qooxdoo.application.translationDirectory", this.translationDirectory.getAbsolutePath());
-        if (this.getSdkVersion() != null) {
-            this.project.getProperties().put("qooxdoo.sdk.version", this.getSdkVersion());
+        project.getProperties().put("qooxdoo.application.namespace", namespace);
+        project.getProperties().put("qooxdoo.application.config", config);
+        project.getProperties().put("qooxdoo.application.resourcesDirectory", resourcesDirectory.getAbsolutePath());
+        project.getProperties().put("qooxdoo.application.sourcesDirectory", sourcesDirectory.getAbsolutePath());
+        project.getProperties().put("qooxdoo.application.testDirectory", testDirectory.getAbsolutePath());
+        project.getProperties().put("qooxdoo.application.outputDirectory", outputDirectory.getAbsolutePath());
+        project.getProperties().put("qooxdoo.application.cacheDirectory", cacheDirectory.getAbsolutePath());
+        project.getProperties().put("qooxdoo.application.translationDirectory", translationDirectory.getAbsolutePath());
+        if (getSdkVersion() != null) {
+            project.getProperties().put("qooxdoo.sdk.version", getSdkVersion());
         }
-        this.project.getProperties().put("qooxdoo.build.sourceEncoding", this.encoding);
-        this.project.getProperties().put("qooxdoo.modules.cacheDirectory", this.modulesCacheDirectory.getAbsolutePath());
+        project.getProperties().put("qooxdoo.build.sourceEncoding", encoding);
+        project.getProperties().put("qooxdoo.modules.cacheDirectory", modulesCacheDirectory.getAbsolutePath());
     }
 }

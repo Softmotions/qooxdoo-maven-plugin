@@ -26,8 +26,7 @@ import java.util.Properties;
  * requiresDependencyResolution compile
  */
 @Mojo(name = "compile",
-      defaultPhase = LifecyclePhase.COMPILE,
-      requiresDependencyResolution = ResolutionScope.COMPILE)
+      defaultPhase = LifecyclePhase.COMPILE)
 public class CompileMojo extends AbstractGeneratorMojo {
 
     @Override

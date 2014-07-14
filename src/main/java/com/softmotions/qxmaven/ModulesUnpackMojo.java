@@ -2,10 +2,18 @@ package com.softmotions.qxmaven;
 
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
+import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
+import org.apache.maven.model.Build;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.repository.RepositorySystem;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 import org.codehaus.plexus.util.FileUtils;
@@ -28,24 +36,27 @@ import java.util.jar.Manifest;
  */
 
 @Mojo(name = "modules-unpack",
-      defaultPhase = LifecyclePhase.INITIALIZE,
-      requiresDependencyResolution = ResolutionScope.COMPILE)
+      defaultPhase = LifecyclePhase.INITIALIZE)
 public class ModulesUnpackMojo extends AbstractQooxdooMojo {
 
 
     public void execute() throws MojoExecutionException {
+        Build build = project.getBuild();
+        try {
+            build.setOutputDirectory(outputDirectory.getCanonicalPath());
+        } catch (IOException e) {
+            throw new MojoExecutionException("", e);
+        }
         unpackSdk();
         unpackModules();
     }
 
 
     void unpackModules() throws MojoExecutionException {
-        Set<Artifact> artifacts = project.getArtifacts();
-        if (artifacts.isEmpty()) {
-            return;
-        }
-        for (final Artifact af : artifacts) {
-            if (af.isOptional() ||
+        for (final Dependency d : project.getDependencies()) {
+            Artifact af = resolveJarArtifact(d);
+            if (af == null ||
+                af.isOptional() ||
                 !"sources".equals(af.getClassifier()) ||
                 !"jar".equals(af.getType())) {
                 continue;

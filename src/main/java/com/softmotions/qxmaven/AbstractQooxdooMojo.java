@@ -1,13 +1,18 @@
 package com.softmotions.qxmaven;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
+import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.eclipse.aether.impl.ArtifactResolver;
@@ -15,7 +20,6 @@ import org.eclipse.aether.impl.ArtifactResolver;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
-import java.util.Set;
 
 /**
  * @author Adamansky Anton (anton@adamansky.com)
@@ -69,7 +73,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * Path to the qooxdoo application source directory, containing the application classes.
-     *
+     * <p/>
      * parameter property="qooxdoo.application.sourcesDirectory"
      * default-value="${project.basedir}/src/main/qooxdoo/classes"
      * required
@@ -81,7 +85,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * Path to the qooxdoo application test directory, containing the application unit-test classes.
-     *
+     * <p/>
      * parameter property="qooxdoo.application.testDirectory"
      * default-value="${project.basedir}/src/test/qooxdoo"
      * required
@@ -93,7 +97,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * Path to the qooxdoo application resources directory.
-     *
+     * <p/>
      * parameter property="qooxdoo.application.resourcesDirectory"
      * default-value="${project.basedir}/src/main/qooxdoo/resources"
      * required
@@ -105,7 +109,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * Path to the output cache directory where the cache informations will be stored.
-     *
+     * <p/>
      * parameter property="qooxdoo.application.cacheDirectory"
      * default-value="${project.build.directory}/qooxdoo/cache"
      * required
@@ -117,7 +121,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * Path to the directory containing translation files.
-     *
+     * <p/>
      * parameter property="qooxdoo.application.translationDirectory"
      * default-value="${project.basedir}/src/main/qooxdoo/translation"
      * required
@@ -129,7 +133,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * Path to the configuration directory.
-     *
+     * <p/>
      * parameter property="qooxdoo.application.configurationDirectory"
      * default-value="${project.basedir}/src/main/qooxdoo/configuration"
      */
@@ -140,7 +144,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * The namespace of the qooxdoo application.
-     *
+     * <p/>
      * parameter property="qooxdoo.application.namespace"
      * default-value="${project.artifactId}"
      * required
@@ -154,7 +158,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
      * Path to the qooxdoo sdk parent directory
      * The parent directory must contains a sub-directory named qooxdoo-sdk, that contains the unpacked qooxdoo sdk.
      * The qooxdoo-sdk is automatically installed in the right place if you are using the qooxdoo-sdk maven dependency in your pom.
-     *
+     * <p/>
      * parameter property="qooxdoo.modules.cacheDirectory"
      * default-value="${project.build.directory}"
      * required
@@ -166,7 +170,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * Path to the output directory where application will be builded.
-     *
+     * <p/>
      * parameter property="qooxdoo.application.outputDirectory"
      * default-value="${project.build.directory}/qooxdoo"
      * required
@@ -178,7 +182,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * The character encoding scheme to be applied when filtering resources.
-     *
+     * <p/>
      * parameter property="project.build.sourceEncoding"
      * default-value="UTF-8"
      * required
@@ -190,7 +194,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * The name of the qooxdoo application configuration file.
-     *
+     * <p/>
      * parameter property="qooxdoo.application.config"
      * default-value="config.json"
      * required
@@ -202,7 +206,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * The name of the qooxdoo application manifest file.
-     *
+     * <p/>
      * parameter property="qooxdoo.application.manifest"
      * default-value="Manifest.json"
      * required
@@ -214,7 +218,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * Name of the job used to build the application.
-     *
+     * <p/>
      * parameter property="qooxdoo.build.job"
      * default-value="build"
      */
@@ -225,7 +229,7 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * Path to the sdk directory
-     *
+     * <p/>
      * readonly
      */
     @Parameter(readonly = true)
@@ -233,11 +237,17 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
 
     /**
      * Path to the qooxdoo application target
-     *
+     * <p/>
      * readonly
      */
     @Parameter(readonly = true)
     private File applicationTarget;
+
+    @Component(role = RepositorySystem.class)
+    protected RepositorySystem repoSystem;
+
+    @Parameter(required = true, readonly = true, defaultValue = "${localRepository}")
+    protected ArtifactRepository localRepository;
 
 
     protected AbstractQooxdooMojo() {
@@ -295,25 +305,47 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
         return qooxdooSdk.getVersion();
     }
 
+
+    protected Artifact resolveJarArtifact(Dependency d) {
+        Artifact a = repoSystem.createDependencyArtifact(d);
+        ArtifactResolutionRequest areq = new ArtifactResolutionRequest();
+        areq.setArtifact(a);
+        areq.setLocalRepository(localRepository);
+        areq.setRemoteRepositories(project.getRemoteArtifactRepositories());
+        ArtifactResolutionResult resolve = repoSystem.resolve(areq);
+        for (final Artifact res : resolve.getArtifacts()) {
+            if (d.getArtifactId().equals(res.getArtifactId())) {
+                a = res;
+                break;
+            }
+        }
+        if (a.getFile() != null && a.getFile().isDirectory()) {
+            a = localRepository.find(a);
+            if (a.getFile() == null || !a.getFile().exists()) {
+                a = null;
+            }
+        }
+        return a;
+    }
+
     /**
      * Get the qooxdoo-sdk dependency
      */
     public Artifact getQooxdooSdkArtifact() {
-        Set<Artifact> dependencies = project.getArtifacts();
-        if (dependencies.size() == 0) {
-            return null;
-        }
-        //ArtifactFilter runtime = new ScopeArtifactFilter(Artifact.SCOPE_PROVIDED);
-        for (Artifact dependency : dependencies) {
-            if (!dependency.isOptional()
-                && "jar".equals(dependency.getType())
-                && "org.qooxdoo".equals(dependency.getGroupId())
-                && "qooxdoo-sdk".equals(dependency.getArtifactId())
-                /*&& runtime.include(dependency)<*/) {
-                return dependency;
+        Artifact res = null;
+        for (Dependency d : project.getDependencies()) {
+            if (!d.isOptional() &&
+                "jar".equals(d.getType()) &&
+                "org.qooxdoo".equals(d.getGroupId()) &&
+                "qooxdoo-sdk".equals(d.getArtifactId())) {
+                res = resolveJarArtifact(d);
+                if (res != null && !"provided".equals(res.getScope())) {
+                    res = null;
+                }
+                return res;
             }
         }
-        return null;
+        return res;
     }
 
 
