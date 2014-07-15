@@ -72,7 +72,7 @@ public class ModulesUnpackMojo extends AbstractQooxdooMojo {
                             Manifest oldMf = new Manifest(fis);
                             String oldTs = oldMf.getMainAttributes().getValue("Qooxdoo-Jar-Timestamp");
                             String newTs = mainAttributes.getValue("Qooxdoo-Jar-Timestamp");
-                            if (oldTs == newTs || newTs.equals(oldTs)) {
+                            if (newTs != null && newTs.equals(oldTs)) {
                                 getLog().info("Unpacked artifact: " + af + " is up to date");
                                 continue;
                             }

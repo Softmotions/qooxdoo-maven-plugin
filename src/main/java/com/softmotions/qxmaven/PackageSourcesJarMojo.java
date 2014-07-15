@@ -31,7 +31,7 @@ public class PackageSourcesJarMojo extends PackageJarMojo {
         File jarFile = getJarFile(jarOutputDirectory, jarFinalName, getClassifier());
         if (jarFile.isFile() && !isQooxdooSourcesChanged()) {
             getLog().info("Source JAR archive: " + jarFile.getPath() + " is up to date ");
-            return null;
+            return jarFile;
         }
         getLog().info("Creating source JAR archive: " + jarFile.getPath());
         MavenArchiver ma = new MavenArchiver();
