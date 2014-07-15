@@ -2,18 +2,11 @@ package com.softmotions.qxmaven;
 
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
-import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.apache.maven.repository.RepositorySystem;
 import org.codehaus.plexus.archiver.UnArchiver;
 import org.codehaus.plexus.archiver.manager.NoSuchArchiverException;
 import org.codehaus.plexus.util.FileUtils;
@@ -21,7 +14,6 @@ import org.codehaus.plexus.util.FileUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -78,8 +70,9 @@ public class ModulesUnpackMojo extends AbstractQooxdooMojo {
                     if (oldMfFile.exists()) {
                         try (FileInputStream fis = new FileInputStream(oldMfFile)) {
                             Manifest oldMf = new Manifest(fis);
-                            String oldVersion = oldMf.getMainAttributes().getValue("Qooxdoo-App-Version");
-                            if (af.getVersion().equals(oldVersion)) {
+                            String oldTs = oldMf.getMainAttributes().getValue("Qooxdoo-Jar-Timestamp");
+                            String newTs = mainAttributes.getValue("Qooxdoo-Jar-Timestamp");
+                            if (oldTs == newTs || newTs.equals(oldTs)) {
                                 getLog().info("Unpacked artifact: " + af + " is up to date");
                                 continue;
                             }
@@ -102,6 +95,9 @@ public class ModulesUnpackMojo extends AbstractQooxdooMojo {
                 unArchiver.setSourceFile(afile);
                 unArchiver.setDestDirectory(moduleDir);
                 unArchiver.extract();
+
+                project.getProperties().setProperty("qooxdoo.application.dependency.updated", "true");
+
             } catch (NoSuchArchiverException | IOException e) {
                 throw new MojoExecutionException("Failed to unpack qooxdoo module: " + af, e);
             }

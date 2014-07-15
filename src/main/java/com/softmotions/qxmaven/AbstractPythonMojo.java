@@ -23,7 +23,7 @@ public abstract class AbstractPythonMojo extends AbstractQooxdooMojo {
 
     /**
      * Name of the python interpreter or full path to it
-     *
+     * <p/>
      * parameter property="qooxdoo.build.python"
      * default-value="python"
      */
@@ -36,7 +36,7 @@ public abstract class AbstractPythonMojo extends AbstractQooxdooMojo {
      */
     public void execute() throws MojoExecutionException, MojoFailureException {
         // Launch job
-        getLog().info("Starting '" + getSCRIPT_NAME() + "' using external Python interpreter...");
+        getLog().info("Starting '" + getScriptName() + "' using external Python interpreter...");
         python();
     }
 
@@ -67,7 +67,7 @@ public abstract class AbstractPythonMojo extends AbstractQooxdooMojo {
      * @return The resolved file
      */
     protected File resolvePythonScriptPath() throws MojoExecutionException {
-        File pythonScript = new File(getSdkDirectory(), "tool" + File.separator + "bin" + File.separator + getSCRIPT_NAME());
+        File pythonScript = new File(getSdkDirectory(), "tool" + File.separator + "bin" + File.separator + getScriptName());
         // Check script existence
         if (!pythonScript.exists() || !pythonScript.canRead()) {
             getLog().warn(
@@ -104,11 +104,11 @@ public abstract class AbstractPythonMojo extends AbstractQooxdooMojo {
         return cmdLine;
     }
 
-    public static String getSCRIPT_NAME() {
+    public static String getScriptName() {
         return SCRIPT_NAME;
     }
 
-    public static void setSCRIPT_NAME(String sCRIPT_NAME) {
-        SCRIPT_NAME = sCRIPT_NAME;
+    public static void setScriptName(String name) {
+        SCRIPT_NAME = name;
     }
 }

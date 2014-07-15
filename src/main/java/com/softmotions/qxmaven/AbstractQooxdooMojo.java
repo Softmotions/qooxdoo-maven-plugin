@@ -320,9 +320,15 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
             }
         }
         if (a.getFile() != null && a.getFile().isDirectory()) {
+            File fdir = a.getFile();
             a = localRepository.find(a);
-            if (a.getFile() == null || !a.getFile().exists()) {
-                a = null;
+            if (a.getFile() != null) {
+                File f1 = new File(fdir.getParentFile(), a.getFile().getName());
+                if (f1.isFile()) {
+                    a.setFile(f1);
+                } else if (!a.getFile().isFile()) {
+                    a = null;
+                }
             }
         }
         return a;
@@ -374,6 +380,9 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
     }
 
     protected boolean isQooxdooSourcesChanged() {
+        if ("true".equals(project.getProperties().get("qooxdoo.application.dependency.updated"))) {
+            return true;
+        }
         long ts = 0;
         String ljob = null;
         Properties genprops = new Properties();

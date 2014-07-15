@@ -22,7 +22,7 @@ public abstract class AbstractGeneratorMojo extends AbstractPythonMojo {
     private String jobName = "<jobname>";
 
     static {
-        setSCRIPT_NAME("generator.py");
+        setScriptName("generator.py");
     }
 
     /**

@@ -35,8 +35,9 @@ public class CompileMojo extends AbstractGeneratorMojo {
             getLog().info("No Qooxdoo sources/job changed skip application generation");
             return;
         }
+        String ts = String.valueOf(System.currentTimeMillis());
         Properties genprops = new Properties();
-        genprops.setProperty("ts", String.valueOf(System.currentTimeMillis()));
+        genprops.setProperty("ts", ts);
         genprops.setProperty("job", buildJob);
 
         this.setJobName(buildJob);

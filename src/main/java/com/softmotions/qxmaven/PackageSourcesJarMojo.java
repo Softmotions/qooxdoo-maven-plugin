@@ -9,7 +9,6 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.archiver.jar.ManifestException;
 
 import java.io.File;
@@ -20,7 +19,7 @@ import java.io.IOException;
  * @author Adamansky Anton (adamansky@gmail.com)
  */
 @Mojo(name = "package-sources",
-      defaultPhase = LifecyclePhase.PACKAGE)
+      defaultPhase = LifecyclePhase.PROCESS_RESOURCES)
 
 public class PackageSourcesJarMojo extends PackageJarMojo {
 
@@ -29,8 +28,11 @@ public class PackageSourcesJarMojo extends PackageJarMojo {
     }
 
     protected File createArchive() throws MojoExecutionException {
-
         File jarFile = getJarFile(jarOutputDirectory, jarFinalName, getClassifier());
+        if (jarFile.isFile() && !isQooxdooSourcesChanged()) {
+            getLog().info("Source JAR archive: " + jarFile.getPath() + " is up to date ");
+            return null;
+        }
         getLog().info("Creating source JAR archive: " + jarFile.getPath());
         MavenArchiver ma = new MavenArchiver();
         ma.setArchiver(jarArchiver);
@@ -41,6 +43,7 @@ public class PackageSourcesJarMojo extends PackageJarMojo {
         archive.addManifestEntry("Qooxdoo-App-Namespace", this.getNamespace());
         archive.addManifestEntry("Qooxdoo-App-Build-Job", this.buildJob);
         archive.addManifestEntry("Qooxdoo-App-Version", this.project.getVersion());
+        archive.addManifestEntry("Qooxdoo-Jar-Timestamp", String.valueOf(System.currentTimeMillis()));
         if (getSdkVersion() != null) {
             archive.addManifestEntry("Qooxdoo-Sdk-Version", getSdkVersion());
         }

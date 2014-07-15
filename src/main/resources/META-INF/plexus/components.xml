@@ -35,11 +35,9 @@
                             <initialize>softmotions:qooxdoo-maven-plugin:modules-unpack</initialize>
                             <generate-sources>softmotions:qooxdoo-maven-plugin:generate-config</generate-sources>
                             <generate-resources>softmotions:qooxdoo-maven-plugin:generate-resources</generate-resources>
+                            <process-resources>softmotions:qooxdoo-maven-plugin:package-sources</process-resources>
                             <compile>softmotions:qooxdoo-maven-plugin:compile</compile>
-                            <package>
-                                softmotions:qooxdoo-maven-plugin:package-jar,
-                                softmotions:qooxdoo-maven-plugin:package-sources
-                            </package>
+                            <package>softmotions:qooxdoo-maven-plugin:package-jar</package>
                             <install>org.apache.maven.plugins:maven-install-plugin:install</install>
                         </phases>
                     </lifecycle>
