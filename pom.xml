@@ -24,7 +24,7 @@
     <distributionManagement>
         <repository>
             <id>jaxion_repository</id>
-            <url>http://jaxion.org/mvn/</url>
+            <url>sftp://jaxion.org/mvn/</url>
         </repository>
     </distributionManagement>
 
