@@ -147,6 +147,13 @@ public abstract class AbstractPythonMojo extends AbstractQooxdooMojo {
                 url = "https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.6.0-linux32.tar.bz2";
                 execPath = Paths.get(binDir.toString(), "pypy2-v5.6.0-linux32", "bin/pypy");
             }
+            /*if (is64bit) {
+                url = "https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.6-linux_x86_64-portable.tar.bz2";
+                execPath = Paths.get(binDir.toString(), "pypy-5.6-linux_x86_64-portable", "bin/pypy");
+            } else {
+                url = "https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.6-linux_i686-portable.tar.bz2";
+                execPath = Paths.get(binDir.toString(), "pypy-5.6-linux_i686-portable", "bin/pypy");
+            }*/
         } else if (SystemUtils.IS_OS_MAC_OSX) {
             url = "https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.6.0-osx64.tar.bz2";
             execPath = Paths.get(binDir.toString(), "pypy2-v5.6.0-osx64", "bin/pypy");
@@ -257,10 +264,19 @@ public abstract class AbstractPythonMojo extends AbstractQooxdooMojo {
                 if (entry.isDirectory()) {
                     f.mkdirs();
                 } else {
-                    try (FileOutputStream fos = new FileOutputStream(f)) {
-                        IOUtils.copyLarge(ain, fos);
+                    if (entry.isSymbolicLink()) {
+                        if (File.pathSeparatorChar == ';') {
+                            getLog().info("Not creating symbolic link " + entry.getName() + " -> " + entry.getLinkName());
+                        } else {
+                            Path p = f.toPath();
+                            Files.createSymbolicLink(p, p.getParent().resolve(entry.getLinkName()));
+                        }
+                    } else {
+                        try (FileOutputStream fos = new FileOutputStream(f)) {
+                            IOUtils.copyLarge(ain, fos);
+                        }
+                        Files.setPosixFilePermissions(f.toPath(), intModeToPosix(entry.getMode() & 0000777));
                     }
-                    Files.setPosixFilePermissions(f.toPath(), intModeToPosix(entry.getMode() & 0000777));
                 }
             }
         }
