@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,13 +60,13 @@ public class GenerateResourcesMojo extends AbstractResourcesMojo {
             Resource config = new Resource();
             config.setFiltering(false);
             config.setDirectory(siteroot.getAbsolutePath());
-            config.setExcludes(Arrays.asList("WEB-INF/**/*.xml"));
+            config.setExcludes(Collections.singletonList("WEB-INF/**/*.xml"));
             resources.add(config);
 
             config = new Resource();
             config.setFiltering(true);
             config.setDirectory(siteroot.getAbsolutePath());
-            config.setIncludes(Arrays.asList("WEB-INF/**/*.xml"));
+            config.setIncludes(Collections.singletonList("WEB-INF/**/*.xml"));
             resources.add(config);
         }
         return resources;

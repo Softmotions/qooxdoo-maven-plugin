@@ -53,7 +53,7 @@ public abstract class AbstractGeneratorMojo extends AbstractPythonMojo {
         File config = new File(this.getApplicationTarget(), this.config);
         map.put("config", config);
         map.put("job", jobName);
-        CommandLine cmdLine = new CommandLine(pythonInterpreter);
+        CommandLine cmdLine = new CommandLine(loadPythonInterpreter());
         cmdLine.addArgument(resolvePythonScriptPath().getAbsolutePath());
         cmdLine.addArgument("--no-progress-indicator");
         cmdLine.addArgument("--config");

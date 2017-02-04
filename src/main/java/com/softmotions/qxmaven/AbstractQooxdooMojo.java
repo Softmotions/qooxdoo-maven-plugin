@@ -1,5 +1,9 @@
 package com.softmotions.qxmaven;
 
+import java.io.File;
+import java.io.FileReader;
+import java.util.Properties;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
@@ -17,10 +21,6 @@ import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.archiver.manager.ArchiverManager;
 import org.eclipse.aether.impl.ArtifactResolver;
 
-import java.io.File;
-import java.io.FileReader;
-import java.util.Properties;
-
 /**
  * @author Adamansky Anton (anton@adamansky.com)
  * @version $Id$
@@ -32,31 +32,31 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
     /**
      * component
      */
-    @Component
+    @Parameter(defaultValue = "${project}", readonly = true)
     protected MavenProject project;
 
     /**
      * component
      */
-    @Component
+    @Parameter(defaultValue = "${mojoExecution}", readonly = true)
     protected MojoExecution mojo;
 
     /**
      * component
      */
-    @Component
+    @Parameter(defaultValue = "${session}", readonly = true)
     protected MavenSession session;
 
     /**
      * component
      */
-    @Component
+    @Parameter(defaultValue = "${plugin}", readonly = true)
     protected PluginDescriptor plugin;
 
     /**
      * component
      */
-    @Component
+    @Parameter(defaultValue = "${settings}", readonly = true)
     protected Settings settings;
 
     /**
@@ -223,9 +223,15 @@ public abstract class AbstractQooxdooMojo extends AbstractMojo {
      * default-value="build"
      */
     @Parameter(property = "qooxdoo.build.job",
-               defaultValue = "build",
-               required = false)
+               defaultValue = "build")
     protected String buildJob;
+
+    /**
+     * Bin directory for embedded python interpreter
+     */
+    @Parameter(property = "qooxdoo.build.bindir",
+               defaultValue = "${project.basedir}/.bin")
+    protected File binDir;
 
     /**
      * Path to the sdk directory

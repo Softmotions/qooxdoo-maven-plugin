@@ -23,10 +23,12 @@ import java.io.IOException;
 
 public class PackageSourcesJarMojo extends PackageJarMojo {
 
+    @Override
     protected String getClassifier() {
         return "sources";
     }
 
+    @Override
     protected File createArchive() throws MojoExecutionException {
         File jarFile = getJarFile(jarOutputDirectory, jarFinalName, getClassifier());
         if (jarFile.isFile() && !isQooxdooSourcesChanged()) {
