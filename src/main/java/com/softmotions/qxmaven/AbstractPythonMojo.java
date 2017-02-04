@@ -141,19 +141,12 @@ public abstract class AbstractPythonMojo extends AbstractQooxdooMojo {
         }
         if (SystemUtils.IS_OS_LINUX) {
             if (is64bit) {
-                url = "https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.6.0-linux64.tar.bz2";
-                execPath = Paths.get(binDir.toString(), "pypy2-v5.6.0-linux64", "bin/pypy");
-            } else {
-                url = "https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.6.0-linux32.tar.bz2";
-                execPath = Paths.get(binDir.toString(), "pypy2-v5.6.0-linux32", "bin/pypy");
-            }
-            /*if (is64bit) {
                 url = "https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.6-linux_x86_64-portable.tar.bz2";
                 execPath = Paths.get(binDir.toString(), "pypy-5.6-linux_x86_64-portable", "bin/pypy");
             } else {
                 url = "https://bitbucket.org/squeaky/portable-pypy/downloads/pypy-5.6-linux_i686-portable.tar.bz2";
                 execPath = Paths.get(binDir.toString(), "pypy-5.6-linux_i686-portable", "bin/pypy");
-            }*/
+            }
         } else if (SystemUtils.IS_OS_MAC_OSX) {
             url = "https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.6.0-osx64.tar.bz2";
             execPath = Paths.get(binDir.toString(), "pypy2-v5.6.0-osx64", "bin/pypy");
