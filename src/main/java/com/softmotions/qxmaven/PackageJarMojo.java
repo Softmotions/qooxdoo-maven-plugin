@@ -1,5 +1,7 @@
 package com.softmotions.qxmaven;
 
+import java.io.File;
+
 import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.archiver.MavenArchiver;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -10,8 +12,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProjectHelper;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
-
-import java.io.File;
 
 /**
  * Package compiled qxoodoo application
@@ -189,13 +189,16 @@ public class PackageJarMojo extends AbstractQooxdooMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         File jarFile = createArchive();
+        String classifier = getClassifier();
         if (jarFile == null) {
             return;
         }
-        getLog().info("Archive: " + jarFile.getPath() + " successfully created");
-        String classifier = getClassifier();
+        getLog().info("Archive: " + jarFile.getPath() + " successfully created, classifier: " + classifier);
         if (classifier != null) {
             projectHelper.attachArtifact(project, getType(), classifier, jarFile);
+            if (project.getArtifact().getFile() == null) {
+                project.getArtifact().setFile(jarFile);
+            }
         } else {
             project.getArtifact().setFile(jarFile);
         }
